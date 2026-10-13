@@ -8,7 +8,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 class ApiConstants {
   ApiConstants._();
 
-  static const String baseUrl = ''; // Isi dengan base URL NewsAPI
+  static const String baseUrl = 'https://newsapi.org/v2'; 
   
   static String get apiKey => (dotenv.maybeGet('NEWS_API_KEY') ?? '').trim();
 

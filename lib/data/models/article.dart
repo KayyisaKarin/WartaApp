@@ -20,27 +20,51 @@ class Article {
   final String title;
   final String sourceName;
   final String url;
-  final DateTime publishedAt;
+  final DateTime? publishedAt;
   final String? author;
   final String? description;
   final String? imageUrl;
   final String? content;
 
   // TODO: Implementasi cleanContent
-  String get cleanContent => content ?? '';
+  String get cleanContent => (content ?? '').replaceAll(RegExp(r'\s*\[\+\d+ chars\]$'), '').trim();
 
   // TODO: Implementasi isValid
-  bool get isValid => true;
+  bool get isValid => title.isNotEmpty && title != '[Removed]' && url.isNotEmpty;
+
+  @override
+  bool operator ==(Object other) => other is Article && other.url == url;
+
+  @override
+  int get hashCode => url.hashCode; // berfungsi untuk mengubah semua objek menjadi kode acak. Tujuan: biar semua objek agar aman
 
   // TODO: Implementasi fromJson
   factory Article.fromJson(Map<String, dynamic> json) {
-    return dummy;
+    final source = json['source'] as Map<String, dynamic>?;
+    return Article(
+      title:  json['title'] as String? ?? '',
+      sourceName: source?['name'] as String? ?? 'Tanpa Sumber',
+      url: json['url'] as String? ?? '',
+      publishedAt: DateTime.tryParse(json['publishedAt'] as String? ?? ''),
+      author: json['author'] as String?,
+      description: json['description'] as String?,
+      imageUrl: json['imageUrl'] as String?,
+      content: json['content'] as String?
+    );
   }
 
   // TODO: Implementasi toJson
-  Map<String, dynamic> toJson() {
-    return {};
-  }
+  Map<String, dynamic> toJson() => {
+    'title': title,
+    'url': url,
+    'source': {'name': sourceName},
+    'description': description,
+    'content': content,
+    'author': author,
+    'urlToImage': imageUrl,
+    'publishedAt': publishedAt?.toIso8601String(),
+
+  };
 
   // Dummy article untuk UI sementara
   static final dummy = Article(
