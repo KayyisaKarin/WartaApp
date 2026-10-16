@@ -1,5 +1,7 @@
 // import '../../core/constants/api_constants.dart';
 import '../models/article.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 // TODO 3: Implementasi NewsApiService
 // 1. Install package http: `flutter pub add http`
