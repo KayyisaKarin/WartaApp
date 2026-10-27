@@ -10,8 +10,8 @@ class NewsRepository {
   NewsRepository(this._apiService);
   
   final NewsApiService _apiService;
-  Future<List<Article>> getTopHeadlines(NewsCategory category) async {
-    return _apiService.fetchTopHeadlines(category.apiValue);
+  Future<List<Article>> getTopHeadlines(String category) async {
+    return _apiService.fetchTopHeadlines(category);
   }
   Future<List<Article>> searchArticles(String query) async {
     return _apiService.searchArticles(query);
