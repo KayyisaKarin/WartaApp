@@ -1,4 +1,3 @@
-// import 'package:news_app/core/constants/news_category.dart';
 import 'package:news_app/core/constants/news_category.dart';
 
 import '../models/article.dart';

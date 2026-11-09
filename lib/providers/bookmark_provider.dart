@@ -8,6 +8,34 @@
 // 5. Buat fungsi isBookmarked(Article article) untuk mengecek apakah artikel sudah ada di bookmark
 // 6. Buat bookmarkProvider (AsyncNotifierProvider) untuk digunakan di UI
 
-class BookmarkNotifier {
-  // Siswi akan membuat AsyncNotifier untuk Riverpod
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:news_app/data/models/article.dart';
+import 'package:news_app/data/services/bookmark_storage.dart';
+import 'package:news_app/providers/dependency_provider.dart';
+
+class BookmarkNotifier extends Notifier<List<Article>> {
+BookmarkStorage get _storage => ref.read(bookmarkStorageProvider);
+
+@override
+List<Article> build() {
+  _loadFromStorage();
+  return [];
 }
+
+Future<void> _loadFromStorage() async {
+  state = await _storage.load();
+}
+
+bool isSaved(Article article) => state.contains(article);
+
+void toggle(Article article){
+  state = isSaved(article) ? state.where((item) => item != article).toList() : [article, ...state];
+}
+}
+final bookmarksProvider = NotifierProvider<BookmarkNotifier, List<Article>>(
+  BookmarkNotifier.new
+);
+
+final isBookmarkedProvider = Provider.family<bool, String>((ref, url){
+  return ref.watch(bookmarksProvider).any((article) => article.url == url);
+});

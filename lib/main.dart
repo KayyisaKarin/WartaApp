@@ -5,6 +5,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:news_app/data/services/theme_storage.dart';
 import 'package:news_app/providers/theme_provider.dart';
 import 'app.dart';
+
 Future<void> main() async {
   // During this initialization process, the native splash screen remains visible.
   WidgetsFlutterBinding.ensureInitialized();

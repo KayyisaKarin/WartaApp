@@ -1,4 +1,8 @@
 // import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+
+import 'package:shared_preferences/shared_preferences.dart';
+
 import '../models/article.dart';
 
 // TODO 4: Implementasi BookmarkStorage
@@ -6,15 +10,21 @@ import '../models/article.dart';
 // 2. Buat fungsi saveBookmarks(List<Article> bookmarks) yang me-encode list ke JSON dan simpan ke SharedPreferences
 
 class BookmarkStorage {
-  // static const String _key = 'bookmarks';
-  // final SharedPreferencesAsync _prefs = SharedPreferencesAsync();
+  static const String _key = 'bookmarked_articles';
 
-  Future<List<Article>> getBookmarks() async {
-    // Baca data dari _prefs
-    return [];
+  final SharedPreferencesAsync _prefs = SharedPreferencesAsync();
+
+  Future<List<Article>> load() async {
+   final raw = await _prefs.getStringList(_key) ?? [];
+   return raw
+        .map((item) => Article.fromJson(jsonDecode(item) as Map<String, dynamic>),
+        ).toList();
   }
 
-  Future<void> saveBookmarks(List<Article> bookmarks) async {
-    // Simpan data ke _prefs
+  Future<void> save(List<Article> articles) async {
+    final raw = articles
+                .map((article) => jsonEncode(article.toJson()))
+                .toList();
+    return _prefs.setStringList(_key, raw);
   }
 }
