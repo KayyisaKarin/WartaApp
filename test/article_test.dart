@@ -35,6 +35,17 @@ void main() {
       expect(copy, article);
       expect(copy.sourceName, article.sourceName);
       expect(copy.publishedAt, article.publishedAt);
+      expect(copy.imageUrl, article.imageUrl);
+    });
+
+    test('fromJson supports legacy imageUrl field', () {
+      final article = Article.fromJson({
+        ...json,
+        'urlToImage': null,
+        'imageUrl': 'https://example.com/legacy-img.jpg',
+      });
+
+      expect(article.imageUrl, 'https://example.com/legacy-img.jpg');
     });
 
     test('isValid rejects removed articles', () {
