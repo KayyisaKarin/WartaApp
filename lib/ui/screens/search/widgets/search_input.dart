@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:news_app/providers/search_provider.dart';
 
 /// TODO: Ubah SearchInput menjadi ConsumerStatefulWidget
-class SearchInput extends StatefulWidget {
+class SearchInput extends ConsumerStatefulWidget{
   const SearchInput({super.key});
 
   @override
-  State<SearchInput> createState() => _SearchInputState();
+  ConsumerState<SearchInput> createState() => _SearchInputState();
 }
 
-class _SearchInputState extends State<SearchInput> {
+class _SearchInputState extends ConsumerState<SearchInput> {
   final _controller = TextEditingController();
 
   @override
@@ -19,15 +21,18 @@ class _SearchInputState extends State<SearchInput> {
 
   void _clear() {
     _controller.clear();
-    // TODO: Hapus query dari searchQueryProvider
+    ref.read(searchQueryProvider);
   }
 
   @override
   Widget build(BuildContext context) {
     // TODO: Dengarkan perubahan searchQueryProvider dari luar
-    // ref.listen(searchQueryProvider, (_, next) {
-    //   if (_controller.text != next) _controller.text = next;
-    // });
+    ref.listen(searchQueryProvider, (_, next) {
+      if (_controller.text != next) _controller.text = next;
+      _controller.selection = TextSelection.fromPosition(
+        TextPosition(offset: _controller.text.length)
+      );
+    });
     final scheme = Theme.of(context).colorScheme;
 
     return SearchBar(
